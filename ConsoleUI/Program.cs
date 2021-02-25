@@ -5,44 +5,47 @@ using System;
 
 namespace ConsoleUI
 {
-    //SOLID 
-    //Open Closed Prinsed
-    class Program
-    {
-        static void Main(string[] args)
+    
+        //SOLID
+        //Open Closed Principle
+        class Program
         {
-            //Data Transformation Object
-            // ProductTest();
-            //IoC
-           // CategoryTest();
-        }
-
-        private static void CategoryTest()
-        {
-            CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());
-            foreach (var category in categoryManager.GetAll())
+            static void Main(string[] args)
             {
-                Console.WriteLine(category.CategoryName);
+                //Data Transformation Object
+                ProductTest();
+                //IoC 
+                //CategoryTest();
             }
-        }
 
-        private static void ProductTest()
-        {
-            ProductManager productManager = new ProductManager(new EfProductDal());
-
-            var result = productManager.GetProductDetails();
-
-            if (result.Success == true)
+            private static void CategoryTest()
             {
-                foreach (var product in result.Data)
+                CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());
+                foreach (var category in categoryManager.GetAll().Data)
                 {
-                    Console.WriteLine(product.ProductName + "/" + product.CategoryName);
+                    Console.WriteLine(category.CategoryName);
                 }
             }
-            else
+
+            private static void ProductTest()
             {
-                Console.WriteLine(result.Message);
+                ProductManager productManager = new ProductManager(new EfProductDal()
+                    , new CategoryManager(new EfCategoryDal()));
+
+                var result = productManager.GetProductDetails();
+
+                if (result.Success == true)
+                {
+                    foreach (var product in result.Data)
+                    {
+                        Console.WriteLine(product.ProductName + "/" + product.CategoryName);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(result.Message);
+                }
             }
+
         }
-    }
 }
