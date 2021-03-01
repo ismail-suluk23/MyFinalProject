@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BuisnessAspects.Autofac;
 using Business.CCS;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
@@ -30,6 +31,7 @@ namespace Business.Concrete
 
         }
 
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
@@ -95,6 +97,7 @@ namespace Business.Concrete
 
 
         }
+       
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Update(Product product)
         {
@@ -102,7 +105,7 @@ namespace Business.Concrete
             if (CheckIfProductCountCategoryCorrect(product.CategoryId).Success)
             {
                 _productDal.Add(product);
-                return new SuccessResult(Messages.ProductUpdated);
+                return new SuccessResult(Messages.ProductCountOfCategoryError);
 
             }
             return new ErrorResult();
