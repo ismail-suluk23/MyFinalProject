@@ -22,7 +22,7 @@ namespace Core.Utilities.Security.Hashing
                 var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < computedHash.Length; i++) //eşleşip eşleşilmedigi yer 
                 {
-                    if (computedHash[1]!=passwordHash[i])
+                    if (computedHash[i]!=passwordHash[i])
                     {
                         return false;
                     }

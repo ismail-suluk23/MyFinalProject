@@ -54,12 +54,24 @@ namespace Business.Concrete
 
         private object CheckIfCategoryLimitExceded()
         {
-            throw new NotImplementedException();
+            var result = _categoryService.GetAll();
+            if (result.Data.Count > 15)
+            {
+                return new ErrorResult(Messages.CategoryLimitExceded);
+            }
+
+            return new SuccessResult();
         }
 
         private object CheckIfProductCountOfCategoryCorrect(int categoryId)
         {
-            throw new NotImplementedException();
+            //Select count(*) from products where categoryId=1
+            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
+            if (result >= 15)
+            {
+                return new ErrorResult(Messages.ProductCountOfCategoryError);
+            }
+            return new SuccessResult();
         }
         [CacheAspect]    //key,value
         public IDataResult<List<Product>> GetAll()
